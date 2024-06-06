@@ -21,7 +21,7 @@ export default async function Home() {
           <div className="w-1/2">
             <p>Personal Introduction:</p>
             <div className="w-full bg-[#000] rounded-md p-4">
-              Hello! I am HexWei, a tech enthusiast skilled in front-end engineering, infrastructure management, DevOps, programming, and cybersecurity. I'm passionate about creating efficient solutions, automating workflows, and ensuring security in digital environments. Always excited to tackle technological challenges and innovate.
+              Hello! I am HexWei, a tech enthusiast skilled in front-end engineering, infrastructure management, DevOps, programming, and cybersecurity. I am passionate about creating efficient solutions, automating workflows, and ensuring security in digital environments. Always excited to tackle technological challenges and innovate.
             </div>
           </div>
         </div>
