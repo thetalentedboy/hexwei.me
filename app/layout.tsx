@@ -16,7 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className}>{children}</body>
+      <body className={font.className}>
+        <main className="lg:max-w-5xl m-auto">
+          {children}
+          <p className="text-center text-xs">Copyright © 2024 HexWei </p>
+        </main>
+      </body>
     </html>
   );
 }

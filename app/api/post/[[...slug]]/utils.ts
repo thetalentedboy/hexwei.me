@@ -1,6 +1,8 @@
 import yaml from "js-yaml";
 import fs from "node:fs";
 import path from "node:path";
+import matter, { GrayMatterFile } from 'gray-matter';
+
 
 export function readYaml<T>(path: string) {
 	try {
@@ -28,7 +30,7 @@ export interface fileInfo {
 }
 
 
-export function getAllFilesInfo(directory: string): Promise<fileInfo[] | []> {
+export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
 	return new Promise((resolve, reject) => {
 		fs.readdir(directory, (err, files) => {
 			if (err) {
@@ -58,6 +60,21 @@ export function getAllFilesInfo(directory: string): Promise<fileInfo[] | []> {
 					}
 				});
 			});
+		});
+	});
+}
+
+
+
+export function getFileContent(directory: string): Promise<GrayMatterFile<string>> {
+	return new Promise((resolve, reject) => {
+		fs.readFile(directory, 'utf8', (err, data) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+
+			resolve(matter(data));
 		});
 	});
 }

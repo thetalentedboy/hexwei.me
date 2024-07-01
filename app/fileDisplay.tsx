@@ -1,7 +1,8 @@
 "use client"
 import { Dispatch, SetStateAction, useEffect, useInsertionEffect, useState } from "react";
-import { fileInfo } from "./api/post/[...slug]/utils"
+import { fileInfo } from "./api/post/[[...slug]]/utils"
 import classname from "classnames"
+import { useRouter } from "next/navigation";
 
 interface Props {
 	data: fileInfo[]
@@ -13,6 +14,8 @@ export default function FileDisplay(props: Props) {
 	const [path, setPath] = useState("post/")
 
 	useEffect(() => {
+		console.log(111);
+
 		async function fetchData() {
 			const responce = await fetch(`/api/${path}`)
 			const res = await responce.json()
@@ -20,8 +23,6 @@ export default function FileDisplay(props: Props) {
 		}
 		fetchData()
 	}, [path])
-
-
 
 	const isMultiLayer = path.split('/').filter(part => part !== '').length > 1
 
@@ -49,14 +50,13 @@ export default function FileDisplay(props: Props) {
 
 function FileItem(props: { data: fileInfo, jump: Dispatch<SetStateAction<string>> }) {
 	const { data, jump } = props
+	const router = useRouter()
 
 	const j = () => {
 		if (data.isDirectory) {
 			jump(data.path)
 		} else {
-			// TODO: 根据文件类型 使用不同的适配器来 跳转其他页面
-			location.href = data.path
-			console.log("文件预览", data)
+			router.push(data.path)
 		}
 	}
 
