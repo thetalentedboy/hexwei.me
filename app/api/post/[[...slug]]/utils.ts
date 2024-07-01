@@ -67,8 +67,10 @@ export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
 
 
 export function getFileContent(directory: string): Promise<GrayMatterFile<string>> {
+	console.log(directory, 1);
+
 	return new Promise((resolve, reject) => {
-		fs.readFile(directory, 'utf8', (err, data) => {
+		fs.readFile(decodeURIComponent(directory), 'utf8', (err, data) => {
 			if (err) {
 				reject(err);
 				return;

@@ -1,7 +1,6 @@
 "use client"
-import { Dispatch, SetStateAction, useEffect, useInsertionEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { fileInfo } from "./api/post/[[...slug]]/utils"
-import classname from "classnames"
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -14,8 +13,6 @@ export default function FileDisplay(props: Props) {
 	const [path, setPath] = useState("post/")
 
 	useEffect(() => {
-		console.log(111);
-
 		async function fetchData() {
 			const responce = await fetch(`/api/${path}`)
 			const res = await responce.json()
@@ -62,7 +59,7 @@ function FileItem(props: { data: fileInfo, jump: Dispatch<SetStateAction<string>
 
 	return <div className="flex justify-between  *:pl-2 *:py-1 *:odd:bg-opacity-10 *:odd:bg-[#fff]" onClick={j}>
 		<div className="w-1/2 !pl-6 hover:text-[#3399FF] cursor-pointer">{data.name}</div>
-		<div className="w-1/4">{data.size} {data.path}</div>
+		<div className="w-1/4">{data.size}</div>
 		<div className="w-1/4">{data.date}</div>
 	</div>
 }

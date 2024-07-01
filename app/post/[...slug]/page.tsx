@@ -24,8 +24,6 @@ export default async function Page(props: { params: Params }) {
 	const { params } = props
 	const { slug } = params
 
-	// if (!slug) return NextResponse.redirect(new URL('/'))
-
 	const fileType = getFileType(slug[slug.length - 1]) as FileType
 	const pathname = slug.join("/")
 	const data = await getData(pathname)
@@ -47,9 +45,6 @@ export default async function Page(props: { params: Params }) {
 	</article>
 }
 
-function formatTitle(title: string) {
-	return title.replace(/-/g, ' ').replace(/\..+$/, '');
-}
 
 function getFileType(fileName: string) {
 	const dotIndex = fileName.lastIndexOf('.');

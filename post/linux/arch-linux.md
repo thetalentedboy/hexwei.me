@@ -1,8 +1,8 @@
 
-写在前面
+# 写在前面
 本文为个人使用的一些好用工具推荐及配置教程，可以视为备忘录，发行版为arch linux，如有疑问可联系邮箱。
 
-WM（窗口管理器） or DE（桌面环境）
+## WM（窗口管理器） or DE（桌面环境）
 dwm
 由suckless社区，一群追求极简的程序员来开发的wm环境，不同与普遍意义上的桌面环境DE，他只有窗口管理，类似的竞品还有 i3wm，wayland环境下的Hyprland等。
 
@@ -17,7 +17,7 @@ libvirt + KVM/QEMU
 具体配置详见
 https://wiki.archlinuxcn.org/wiki/Libvirt
 
-软件集合
+# 软件集合
 以下是软件备忘录，为arch pkg或aur内包名，重装系统时方便一键安装。
 
 yay
