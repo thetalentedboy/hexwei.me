@@ -11,12 +11,13 @@ export default function FileDisplay(props: Props) {
 	const { data } = props;
 	const [files, setFiles] = useState<fileInfo[]>(data)
 	const [path, setPath] = useState("post/")
-	console.log(files, 'files');
 
 	useEffect(() => {
 		async function fetchData() {
 			const responce = await fetch(`/api/${path}`)
 			const res = await responce.json()
+			console.log(res, 'test');
+
 			setFiles(res.data)
 		}
 		fetchData()
