@@ -1,7 +1,7 @@
 import { config } from "@/config/const";
 import { NextResponse } from "next/server";
-import { getAllFilesAttr, testFileAccess } from "./utils";
-import path from "node:path";
+import { getAllFilesAttr } from "./utils";
+import { cwd } from "process";
 
 interface Params {
 	slug: string[]
@@ -11,8 +11,14 @@ export async function GET(_: Request, context: { params: Params }) {
 	const rootPath = config?.post.addr
 	const p = context.params?.slug?.join('/') ?? ''
 	const folderDir = rootPath + p
+	throw new Error(cwd() + '|' + folderDir);
 
-	const data = await getAllFilesAttr(folderDir)
-	return NextResponse.json({ data })
+	try {
+		const data = await getAllFilesAttr(folderDir)
+		return NextResponse.json({ data })
+	} catch (error) {
+
+	}
+
 }
 
