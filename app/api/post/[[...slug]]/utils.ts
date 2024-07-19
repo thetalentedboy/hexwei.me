@@ -12,9 +12,10 @@ export function readYaml<T>(path: string) {
 	}
 }
 
-export function testFileAccess(path: string) {
+export function testFileAccess(directory: string) {
+	const p = path.resolve(directory)
 	try {
-		fs.accessSync(path, fs.constants.F_OK | fs.constants.R_OK)
+		fs.accessSync(p, fs.constants.F_OK | fs.constants.R_OK)
 		return true
 	} catch (error) {
 		return false
