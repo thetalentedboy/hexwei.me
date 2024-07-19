@@ -14,15 +14,10 @@ export async function GET(_: Request, context: { params: Params }) {
 	const folderDir = rootPath + p
 
 	try {
-		if (!testFileAccess(path.resolve(folderDir))) {
-			return NextResponse.json({ msg: 'file not found' })
-		}
+		const data = await getAllFilesAttr(folderDir)
+		return NextResponse.json({ data })
 	} catch (error) {
 		console.log(path.resolve(folderDir));
 	}
-
-
-	const data = await getAllFilesAttr(folderDir)
-	return NextResponse.json({ data })
 }
 
