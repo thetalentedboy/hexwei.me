@@ -25,6 +25,8 @@ export default function FileDisplay(props: Props) {
 
 	const back = () => {
 		const parts = path.split('/').filter(part => part !== '');
+
+
 		setPath(parts.slice(0, -1).join('/'))
 	}
 
@@ -50,10 +52,12 @@ function FileItem(props: { data: fileInfo, jump: Dispatch<SetStateAction<string>
 	const router = useRouter()
 
 	const j = () => {
+		const index = data.path.indexOf("post");
+		const p = data.path.substring(index);
 		if (data.isDirectory) {
-			jump(data.path)
+			jump(p)
 		} else {
-			router.push(data.path)
+			router.push(p)
 		}
 	}
 
