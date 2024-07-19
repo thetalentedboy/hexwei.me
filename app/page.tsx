@@ -9,7 +9,6 @@ async function fetchData() {
 
 export default async function Home() {
   const list = await fetchData()
-  console.log(list, 'list');
 
   return (<>
     <header className=" text-main py-10">

@@ -33,9 +33,11 @@ export interface fileInfo {
 
 export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
 	const p = path.resolve(directory)
+
 	return new Promise((resolve, reject) => {
 		fs.readdir(p, (err, files) => {
 			if (err) {
+				console.error('Error reading directory:', directory, p);
 				reject(err);
 				return;
 			}
