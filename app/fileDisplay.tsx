@@ -16,8 +16,6 @@ export default function FileDisplay(props: Props) {
 		async function fetchData() {
 			const responce = await fetch(`/api/${path}`)
 			const res = await responce.json()
-			console.log(res, 'test');
-
 			setFiles(res.data)
 		}
 		fetchData()
