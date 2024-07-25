@@ -2,6 +2,8 @@ import yaml from "js-yaml";
 import fs from "node:fs";
 import path from "node:path";
 import matter, { GrayMatterFile } from 'gray-matter';
+import dayjs from "dayjs";
+import { config } from "@/config/const";
 
 
 export function readYaml<T>(path: string) {
@@ -32,7 +34,6 @@ export interface fileInfo {
 
 
 export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
-
 	return new Promise((resolve, reject) => {
 		fs.readdir(directory, (err, files) => {
 			if (err) {
@@ -54,7 +55,7 @@ export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
 						path: filePath,
 						size: stats.size,
 						isDirectory: stats.isDirectory(),
-						date: stats.mtime.toISOString(),
+						date: dayjs(stats.mtime).format('YY MM-DD HH:mm'),
 					});
 
 					if (filesInfo.length === files.length) {
@@ -69,9 +70,9 @@ export function getAllFilesAttr(directory: string): Promise<fileInfo[] | []> {
 
 
 export function getFileContent(directory: string): Promise<GrayMatterFile<string>> {
-
+	const rootDir = config?.post.addr
 	return new Promise((resolve, reject) => {
-		fs.readFile(decodeURIComponent(directory), 'utf8', (err, data) => {
+		fs.readFile(decodeURIComponent(rootDir + directory), 'utf8', (err, data) => {
 			if (err) {
 				reject(err);
 				return;

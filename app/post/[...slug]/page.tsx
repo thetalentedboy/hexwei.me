@@ -1,9 +1,7 @@
 import Adapter, { FileType } from "@/app/_components/Adapter";
 import { getFileContent } from "@/app/api/post/[[...slug]]/utils";
-import { config } from "@/config/const";
 import { Metadata } from "next";
 import Link from "next/link";
-import { NextRequest, NextResponse } from "next/server";
 
 export const metadata: Metadata = {
 	title: '',
@@ -11,42 +9,35 @@ export const metadata: Metadata = {
 	keywords: ''
 }
 
-interface Params {
-	slug: string[]
-}
-
-async function getData(url: string) {
-	const rootDir = config?.post.addr
-	return await getFileContent(rootDir + url)
-}
-
-export default async function Page(props: { params: Params }) {
+export default async function Page(props: { params: { slug: string[] } }) {
 	const { params } = props
 	const { slug } = params
 
-	const fileType = getFileType(slug[slug.length - 1]) as FileType
+	const fileType = getFileExtName(slug[slug.length - 1]) as FileType
 	const pathname = slug.join("/")
-	const data = await getData(pathname)
-	const title = data.data.title
+	const data = await getFileContent(pathname)
+	const { title = '-', ctime = '1980.01.01', desc = '', keywords = '' } = data.data
 
-	metadata.title = title
+	metadata.title = title ?? "hexwei"
+	metadata.description = desc ?? 'hexwei'
+	metadata.keywords = keywords
 
 	return <article className="mt-20">
 		<p className="text-2xl text-main text-center">{title}</p>
 		<div className="*:text-sm *:text-center">
-			<p>createdAt: {data.data.ctime}</p>
+			<p>createdAt: {ctime ?? '---'}</p>
 		</div>
 		<div id="main" className="mt-7">
 			<Adapter fileType={fileType} content={data.content} />
 		</div>
-		<p className="text-right">
+		<p className="text-right my-6">
 			<Link href={'/'}>cd /</Link>
 		</p>
 	</article>
 }
 
 
-function getFileType(fileName: string) {
+function getFileExtName(fileName: string) {
 	const dotIndex = fileName.lastIndexOf('.');
 	if (dotIndex === -1) {
 		return '';
