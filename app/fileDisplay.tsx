@@ -1,35 +1,27 @@
 "use client"
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
-import { fileInfo } from "./api/post/[[...slug]]/utils"
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { FileInfo } from "./api/post/service"
+import { useUpdateEffect } from "./hooks";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-interface Props {
-	data: fileInfo[]
-}
-
-export default function FileDisplay(props: Props) {
-	const { data } = props;
+export default function FileDisplay({ data }: { data: FileInfo[] }) {
 	const router = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
-	const url = searchParams.get('url') ?? "post/"
 
-	const [path, setPath] = useState(url)
-	const [files, setFiles] = useState<fileInfo[]>(data)
+	const [path, setPath] = useState(searchParams.get('prefix') ?? "post/")
+	const [files, setFiles] = useState(data)
 
-	const createUrlQueryString = useCallback(
-		(value: string) => {
-			const params = new URLSearchParams(searchParams.toString())
-			params.set("url", value)
+	const createUrlQueryString = useCallback((value: string) => {
+		const params = new URLSearchParams(searchParams.toString())
+		params.set("prefix", value)
 
-			return params.toString()
-		},
-		[searchParams]
-	)
+		return params.toString()
+	}, [searchParams])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		async function fetchData() {
-			const responce = await fetch(`/api/${path}`)
+			const responce = await fetch(`/api/post?prefix=${path}`)
 			const res = await responce.json()
 			setFiles(res.data)
 		}
@@ -39,15 +31,10 @@ export default function FileDisplay(props: Props) {
 
 	const isMultiLayer = path.split('/').filter(part => part !== '').length > 1
 
-	const back = () => {
-		const parts = path.split('/').filter(part => part !== '');
-		setPath(parts.slice(0, -1).join('/'))
-	}
-
 	return <div className="bg-shell py-4 overflow-hidden rounded-md">
 		<div className="flex justify-between mb-4 px-4">
 			<div className="text-xl">{path}</div>
-			{isMultiLayer && <div className="text-main hover:text-[#3399FF] cursor-pointer" onClick={back} >cd ..</div>}
+			{isMultiLayer && <div className="text-main hover:text-[#3399FF] cursor-pointer" onClick={() => setPath("post/")} >cd ..</div>}
 		</div>
 		<div className="text-main px-6">
 			<div className="flex justify-around text-lg mb-2">
@@ -61,15 +48,15 @@ export default function FileDisplay(props: Props) {
 }
 
 
-function FileItem(props: { data: fileInfo, jump: Dispatch<SetStateAction<string>> }) {
+function FileItem(props: { data: FileInfo, jump: Dispatch<SetStateAction<string>> }) {
 	const { data, jump } = props
 	const router = useRouter()
-
 
 	const j = () => {
 		const index = data.path.indexOf("post");
 		const p = data.path.substring(index);
-		if (data.isDirectory) {
+
+		if (data.isFolder) {
 			jump(p)
 		} else {
 			router.push(p)

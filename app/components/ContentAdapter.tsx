@@ -9,7 +9,7 @@ const markdown = MarkdownIt({
 	linkify: true,
 })
 
-export default function Adapter({ fileType, content }: { fileType: FileType, content: string }) {
+export default function ContentAdapter({ fileType, content }: { fileType: FileType, content: string }) {
 	switch (fileType) {
 		case 'html':
 			return <Html content={content} />

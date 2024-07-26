@@ -1,5 +1,5 @@
-import Adapter, { FileType } from "@/app/_components/Adapter";
-import { getFileContent } from "@/app/api/post/[[...slug]]/utils";
+import ContentAdapter, { FileType } from "@/app/components/ContentAdapter";
+import { getFileContent } from "@/app/api/post/service";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 	keywords: ''
 }
 
-export default async function Page(props: { params: { slug: string[] } }) {
-	const { params } = props
+export default async function Page({ params }: { params: { slug: string[] } }) {
 	const { slug } = params
 
 	const fileType = getFileExtName(slug[slug.length - 1]) as FileType
-	const pathname = slug.join("/")
-	const data = await getFileContent(pathname)
+	const fileKey = decodeURIComponent(slug.join("/"))
+
+	const data = await getFileContent('post/' + fileKey)
 	const { title = '-', ctime = '1980.01.01', desc = '', keywords = '' } = data.data
 
 	metadata.title = title ?? "hexwei"
@@ -28,7 +28,7 @@ export default async function Page(props: { params: { slug: string[] } }) {
 			<p>createdAt: {ctime ?? '---'}</p>
 		</div>
 		<div id="main" className="mt-7">
-			<Adapter fileType={fileType} content={data.content} />
+			<ContentAdapter fileType={fileType} content={data.content} />
 		</div>
 		<p className="text-right my-6">
 			<Link href={'/'}>cd /</Link>

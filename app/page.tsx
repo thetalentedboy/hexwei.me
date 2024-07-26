@@ -1,18 +1,12 @@
-import { config } from "@/config/const";
-import { getAllFilesAttr } from "./api/post/[[...slug]]/utils";
+import { getListFiles } from "./api/post/service";
 import FileDisplay from "./fileDisplay";
-
-async function fetchData(url: string) {
-  const rootDir = config?.post.addr
-  return await getAllFilesAttr(url ?? rootDir!!)
-}
 
 interface HomeInterface {
   searchParams?: { [key: string]: string | undefined };
 }
 
 export default async function Home({ searchParams }: HomeInterface) {
-  const list = await fetchData(searchParams?.url ?? '')
+  const list = await getListFiles(searchParams?.prefix ?? 'post/')
 
   return (<>
     <header className=" text-main py-10">
