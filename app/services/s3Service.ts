@@ -20,8 +20,6 @@ export function getListObjects(prefix: string): Promise<ListObjectsV2CommandOutp
 }
 
 export async function getObjectContent(key: string): Promise<string> {
-	console.log(key, 'key11111111111');
-
 	const command = new GetObjectCommand({
 		Bucket: 'blog-post',
 		Key: key
@@ -29,24 +27,11 @@ export async function getObjectContent(key: string): Promise<string> {
 
 	try {
 		const response = await client.send(command);
-		const body = await readableStreamToString(response.Body as ReadableStream<Uint8Array>);
-		return body;
+		const content = await response.Body?.transformToString()
+
+		return content || ''
 	} catch (error) {
 		console.error('Error fetching S3 object:', error);
 		throw error;
 	}
-}
-
-// Helper function to convert ReadableStream to string
-async function readableStreamToString(readable: ReadableStream<Uint8Array>): Promise<string> {
-	const reader = readable.getReader();
-	let result = '';
-	while (true) {
-		const { done, value } = await reader.read();
-		if (done) {
-			break;
-		}
-		result += new TextDecoder('utf-8').decode(value);
-	}
-	return result;
 }

@@ -1,34 +1,35 @@
-import ContentAdapter, { FileType } from "@/app/components/ContentAdapter";
+import ContentAdapter, { fileExtName } from "@/app/components/ContentAdapter";
 import { getFileContent } from "@/app/api/post/service";
 import { Metadata } from "next";
 import Link from "next/link";
+import { METADATA } from "@/config/const";
 
 export const metadata: Metadata = {
-	title: '',
-	description: '',
-	keywords: ''
-}
+	title: METADATA.TITLE,
+	description: METADATA.DESC,
+	keywords: METADATA.KEYWORDS
+};
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
 	const { slug } = params
-
-	const fileType = getFileExtName(slug[slug.length - 1]) as FileType
+	const fileExtName = getFileExtName(slug[slug.length - 1]) as fileExtName
 	const fileKey = decodeURIComponent(slug.join("/"))
 
 	const data = await getFileContent('post/' + fileKey)
-	const { title = '-', ctime = '1980.01.01', desc = '', keywords = '' } = data.data
 
-	metadata.title = title ?? "hexwei"
-	metadata.description = desc ?? 'hexwei'
+	const { title = METADATA.TITLE, ctime = '----.--.--', desc = METADATA.DESC, keywords = METADATA.KEYWORDS } = data.data
+	metadata.title = title
+	metadata.description = desc
 	metadata.keywords = keywords
 
 	return <article className="mt-20">
 		<p className="text-2xl text-main text-center">{title}</p>
 		<div className="*:text-sm *:text-center">
-			<p>createdAt: {ctime ?? '---'}</p>
+			<p>createdAt: {ctime}</p>
 		</div>
 		<div id="main" className="mt-7">
-			<ContentAdapter fileType={fileType} content={data.content} />
+			{data.content ? <ContentAdapter fileExtName={fileExtName} content={data.content} /> : '敬请期待......'}
+
 		</div>
 		<p className="text-right my-6">
 			<Link href={'/'}>cd /</Link>
@@ -42,7 +43,6 @@ function getFileExtName(fileName: string) {
 	if (dotIndex === -1) {
 		return '';
 	}
-	const fileType = fileName.slice(dotIndex + 1);
-	return fileType;
+	return fileName.slice(dotIndex + 1);
 }
 

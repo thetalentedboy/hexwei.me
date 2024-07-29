@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it";
 import "./markdown.css"
 
-export type FileType = "html" | "md" | "video"
+export type fileExtName = "html" | "md" | "video"
 
 const markdown = MarkdownIt({
 	html: true,
@@ -9,8 +9,8 @@ const markdown = MarkdownIt({
 	linkify: true,
 })
 
-export default function ContentAdapter({ fileType, content }: { fileType: FileType, content: string }) {
-	switch (fileType) {
+export default function ContentAdapter({ fileExtName, content }: { fileExtName: fileExtName, content: string }) {
+	switch (fileExtName) {
 		case 'html':
 			return <Html content={content} />
 		case 'md':
