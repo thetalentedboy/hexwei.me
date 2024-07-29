@@ -2,16 +2,18 @@ import { S3Client, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCo
 
 const client = new S3Client({
 	region: 'auto',
-	endpoint: 'https://29b331d4c3cf43153a22cc85b588bda0.r2.cloudflarestorage.com',
+	endpoint: process.env.R2_ENDPOINT_URL as string,
 	credentials: {
-		accessKeyId: '513e53f4c77e553f5f7ba06cb90e93cc',
-		secretAccessKey: 'fa0be93ba606ef994c8078f092e8c0396662bb9ba5a98a2aa034a7ff50be4d1f'
+		accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID as string,
+		secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY as string
 	}
 });
 
+const bucketName = process.env.R2_BUCKET_NAME
+
 export function getListObjects(prefix: string): Promise<ListObjectsV2CommandOutput> {
 	const command = new ListObjectsV2Command({
-		Bucket: "blog-post",
+		Bucket: bucketName,
 		Prefix: prefix,
 		Delimiter: '/'
 	});

@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: HomeInterface) {
       <div className="hover:text-[#3399FF]">Archive</div>
       <div className="!border-none hover:text-[#3399FF]">Contact</div>
     </nav>
-    <div className="text-sm text-right w-full">View prefixes as directories</div>
+    <div className="text-xs text-right w-full">View prefixes as directories</div>
     <FileDisplay data={list} />
   </>);
 }
