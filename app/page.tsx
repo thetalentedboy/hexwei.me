@@ -1,3 +1,4 @@
+import { METADATA } from "@/config/const";
 import { getListFiles } from "./api/post/service";
 import FileDisplay from "./fileDisplay";
 
@@ -13,12 +14,11 @@ export default async function Home({ searchParams }: HomeInterface) {
       <div className="m-auto lg:flex lg:justify-center">
         <div className="md:w-1/2 text-center flex justify-center flex-col">
           <div className="text-8xl opacity-70">HexWei</div>
-          <div className="text-xs opacity-50 -mt-4">FE, infra, devops, programming, hacking</div>
+          <div className="text-xs opacity-50 -mt-4">{METADATA.KEYWORDS}</div>
         </div>
         <div className="p-4 md:w-1/2">
           <p className="text-center md:text-left">Personal Introduction:</p>
-          <div className="w-full bg-[#000] rounded-md p-4">
-            Hello! I'm HexWei, a tech enthusiast with expertise in front-end engineering, infrastructure management, DevOps, and programming. I focus on creating efficient solutions and automating workflows. I enjoy tackling technological challenges and innovating in the field.
+          <div className="w-full bg-[#000] rounded-md p-4">{METADATA.DESC}
           </div>
         </div>
       </div>
@@ -28,6 +28,7 @@ export default async function Home({ searchParams }: HomeInterface) {
       <div className="hover:text-[#3399FF]">Archive</div>
       <div className="!border-none hover:text-[#3399FF]">Contact</div>
     </nav>
+    <div className="text-sm text-right w-full">View prefixes as directories</div>
     <FileDisplay data={list} />
   </>);
 }
