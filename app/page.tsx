@@ -1,13 +1,7 @@
 import { METADATA } from "@/config/const";
-import { getListFiles } from "./api/post/service";
-import FileDisplay from "./fileDisplay";
+import PostsDisplay from "./components/PostsDisplay";
 
-interface HomeInterface {
-  searchParams?: { [key: string]: string | undefined };
-}
-
-export default async function Home({ searchParams }: HomeInterface) {
-  const list = await getListFiles(searchParams?.prefix ?? 'post/')
+export default async function Home() {
 
   return (<>
     <header className=" text-main py-10">
@@ -28,7 +22,6 @@ export default async function Home({ searchParams }: HomeInterface) {
       <div className="hover:text-[#3399FF]">Archive</div>
       <div className="!border-none hover:text-[#3399FF]">Contact</div>
     </nav>
-    <div className="text-xs text-right w-full">View prefixes as directories</div>
-    <FileDisplay data={list} />
+    <PostsDisplay />
   </>);
 }

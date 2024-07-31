@@ -1,6 +1,6 @@
 import matter, { GrayMatterFile } from 'gray-matter';
 import dayjs from "dayjs";
-import { getListObjects, getObjectContent } from "@/app/services/s3Service";
+import { DirMode, IPage, getListObjects, getObjectContent } from "@/app/services/s3Service";
 import { _Object, CommonPrefix } from "@aws-sdk/client-s3";
 
 
@@ -12,12 +12,33 @@ export interface FileInfo {
 	date: string
 }
 
-export async function getListFiles(prefix: string): Promise<FileInfo[]> {
-	const data = await getListObjects(prefix)
-	const { Contents = [], CommonPrefixes = [] } = data
+export interface IListFile {
+	list: FileInfo[],
+	page_token: string
+}
 
+export async function getListFiles(page: IPage): Promise<IListFile> {
+	const data = await getListObjects({
+		page,
+		dir: DirMode.Close
+	})
+
+	return {
+		list: mergeContents(data.Contents ?? []),
+		page_token: data.NextContinuationToken ?? ''
+	}
+}
+
+export async function getDirFiles(prefix: string): Promise<FileInfo[]> {
+	const data = await getListObjects({
+		prefix,
+		dir: DirMode.Open
+	})
+
+	const { Contents = [], CommonPrefixes = [] } = data
 	return mergeContents(Contents, CommonPrefixes)
 }
+
 
 
 export async function getFileContent(key: string): Promise<GrayMatterFile<string>> {
@@ -33,7 +54,7 @@ export async function getFileContent(key: string): Promise<GrayMatterFile<string
  * @param prefixes Array of S3Prefixes representing folders.
  * @returns Merged array of FileInfo.
  */
-function mergeContents(contents: _Object[], prefixes: CommonPrefix[]): FileInfo[] {
+function mergeContents(contents: _Object[], prefixes?: CommonPrefix[]): FileInfo[] {
 	const merged: FileInfo[] = [];
 
 	// Add files (S3Objects) to merged array
@@ -48,18 +69,20 @@ function mergeContents(contents: _Object[], prefixes: CommonPrefix[]): FileInfo[
 		merged.push(fileInfo);
 	});
 
-	// Add folders (S3Prefixes) to merged array
-	prefixes.forEach(prefix => {
-		const folderName = prefix.Prefix?.split('/').filter(Boolean).pop() || ''; // Extract last segment as folder name
-		const folderInfo: FileInfo = {
-			name: folderName,
-			path: prefix.Prefix || '',
-			size: 0, // Folders typically don't have a size in S3
-			isFolder: true,
-			date: '' // Folders typically don't have a last modified date in S3
-		};
-		merged.push(folderInfo);
-	});
+	if (prefixes) {
+		// Add folders (S3Prefixes) to merged array
+		prefixes.forEach(prefix => {
+			const folderName = prefix.Prefix?.split('/').filter(Boolean).pop() || ''; // Extract last segment as folder name
+			const folderInfo: FileInfo = {
+				name: folderName,
+				path: prefix.Prefix || '',
+				size: 0, // Folders typically don't have a size in S3
+				isFolder: true,
+				date: '' // Folders typically don't have a last modified date in S3
+			};
+			merged.push(folderInfo);
+		});
+	}
 
 	return merged;
 }

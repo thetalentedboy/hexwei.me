@@ -1,4 +1,4 @@
-import { S3Client, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, ListObjectsV2CommandInput } from "@aws-sdk/client-s3";
 
 const client = new S3Client({
 	region: 'auto',
@@ -11,13 +11,37 @@ const client = new S3Client({
 
 const bucketName = process.env.R2_BUCKET_NAME
 
-export function getListObjects(prefix: string): Promise<ListObjectsV2CommandOutput> {
-	const command = new ListObjectsV2Command({
-		Bucket: bucketName,
-		Prefix: prefix,
-		Delimiter: '/'
-	});
+export enum DirMode {
+	Close,
+	Open,
+}
 
+interface IListsQuery {
+	prefix?: string,
+	dir?: DirMode,
+	page?: IPage
+}
+
+export interface IPage {
+	pageToken: string,
+	pageSize: number
+}
+
+export function getListObjects(listQuery: IListsQuery): Promise<ListObjectsV2CommandOutput> {
+	const commandOptions: ListObjectsV2CommandInput = {
+		Bucket: bucketName
+	}
+	if (listQuery.dir === DirMode.Open) {
+		commandOptions.Prefix = listQuery.prefix
+		commandOptions.Delimiter = '/'
+	} else {
+		commandOptions.MaxKeys = listQuery.page?.pageSize ?? 10
+		if (listQuery.page?.pageToken) {
+			commandOptions.ContinuationToken = listQuery.page.pageToken
+		}
+	}
+
+	const command = new ListObjectsV2Command(commandOptions);
 	return client.send(command);
 }
 
