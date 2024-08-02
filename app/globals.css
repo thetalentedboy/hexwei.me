@@ -4,9 +4,54 @@
 
 body {
 	background: url(../public/body-bg.png) top left repeat;
-	color: #CEFCD2
+	color: #BBB
 }
 
 .bg-shell {
 	background: url(../public/body-bg-shell45.webp) right top repeat-y;
+}
+
+.form-group label {
+	position: relative;
+	cursor: pointer;
+}
+
+.form-group label:before {
+	content: '';
+	-webkit-appearance: none;
+	background-color: transparent;
+	border: 1px solid #BBB;
+	padding: 5px;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+label:hover:before,
+input[type=checkbox]:checked+label:hover:after {
+	border-color: #61EA53;
+}
+
+label.active {
+	color: #61EA53
+}
+
+label.active:before,
+label.active:after {
+	border-color: #61EA53 !important;
+}
+
+.form-group input[type=checkbox]:checked+label:after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	width: 4px;
+	height: 6px;
+	border: solid #BBB;
+	border-width: 0 1px 1px 0;
+	transform: rotate(45deg);
 }

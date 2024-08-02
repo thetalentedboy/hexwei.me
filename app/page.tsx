@@ -3,7 +3,7 @@ import PostsDisplay from "./components/PostsDisplay";
 
 export default async function Home() {
 
-  return (<>
+  return (<main>
     <header className=" text-main py-10">
       <div className="m-auto lg:flex lg:justify-center">
         <div className="md:w-1/2 text-center flex justify-center flex-col">
@@ -11,17 +11,17 @@ export default async function Home() {
           <div className="text-xs opacity-50 -mt-4">{METADATA.KEYWORDS}</div>
         </div>
         <div className="p-4 md:w-1/2">
-          <p className="text-center md:text-left">Personal Introduction:</p>
-          <div className="w-full bg-[#000] rounded-md p-4">{METADATA.DESC}
+          <p className="text-center md:text-left">个人介绍:</p>
+          <div className="w-full bg-[#000] rounded-md p-4 text-sm sm:text-base">{METADATA.DESC}
           </div>
         </div>
       </div>
     </header>
     <nav className="flex text-main mb-8 md:my-14 *:px-4 *:border-r-main *:border-r justify-center *:leading-4 *:cursor-pointer">
       <div className="hover:text-[#3399FF]">Home</div>
-      <div className="hover:text-[#3399FF]">Archive</div>
       <div className="!border-none hover:text-[#3399FF]">Contact</div>
     </nav>
     <PostsDisplay />
-  </>);
+    <p className="text-center text-xs mt-2">Copyright © 2024 By HexWei</p>
+  </main>);
 }

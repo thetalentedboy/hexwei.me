@@ -7,7 +7,7 @@ import { _Object, CommonPrefix } from "@aws-sdk/client-s3";
 export interface FileInfo {
 	name: string
 	path: string
-	size: number
+	size: number | string
 	isFolder: boolean
 	date: string
 }
@@ -76,7 +76,7 @@ function mergeContents(contents: _Object[], prefixes?: CommonPrefix[]): FileInfo
 			const folderInfo: FileInfo = {
 				name: folderName,
 				path: prefix.Prefix || '',
-				size: 0, // Folders typically don't have a size in S3
+				size: '-', // Folders typically don't have a size in S3
 				isFolder: true,
 				date: '' // Folders typically don't have a last modified date in S3
 			};

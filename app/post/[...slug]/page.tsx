@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 
 		</div>
 		<p className="text-right my-6">
-			<Link href={'/'}>cd /</Link>
+			<Link href={'/'} className="hover:text-main">cd ~</Link>
 		</p>
 	</article>
 }
