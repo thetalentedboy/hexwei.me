@@ -1,7 +1,7 @@
 import { METADATA } from "@/config/const";
 import PostsDisplay from "./components/PostsDisplay";
 
-export default async function Home() {
+export default function Home() {
 
   return (<main>
     <header className=" text-main py-10">
@@ -11,7 +11,6 @@ export default async function Home() {
           <div className="text-xs opacity-50 -mt-4">{METADATA.KEYWORDS}</div>
         </div>
         <div className="p-4 md:w-1/2">
-          <p className="text-center md:text-left">个人介绍:</p>
           <div className="w-full bg-[#000] rounded-md p-4 text-sm sm:text-base">{METADATA.DESC}
           </div>
         </div>

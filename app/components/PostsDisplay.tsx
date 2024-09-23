@@ -9,7 +9,7 @@ import BarLoader from 'react-spinners/BarLoader'
 
 
 export default function PostsDisplay() {
-	const [directoryMode, setDirectoryMode] = useState(true)
+	const [directoryMode, setDirectoryMode] = useState(false)
 	const [loading, setLoading] = useState(false)
 
 	const checkboxClass = classnames("text-xs flex items-center hover:text-main hover:border-main", {
