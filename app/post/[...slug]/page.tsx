@@ -17,15 +17,20 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 
 	const data = await getFileContent('post/' + fileKey)
 
-	const { title = METADATA.TITLE, ctime = '----.--.--', desc = METADATA.DESC, keywords = METADATA.KEYWORDS } = data.data
+	console.log(data.data.ctime,11);
+	
+	const { title = METADATA.TITLE, ctime = new Date(), desc = METADATA.DESC, keywords = METADATA.KEYWORDS } = data.data
 	metadata.title = title
 	metadata.description = desc
 	metadata.keywords = keywords
 
+console.log((new Date(ctime)).toString() , 222);
+	
+
 	return <article className="mt-20">
 		<p className="text-2xl text-main text-center">{title}</p>
 		<div className="*:text-sm *:text-center">
-			<p>createdAt: {ctime}</p>
+			<p>createdAt: {ctime.toString()}</p>
 		</div>
 		<div id="main" className="mt-7">
 			{data.content ? <ContentAdapter fileExtName={fileExtName} content={data.content} /> : '敬请期待......'}
